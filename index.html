@@ -360,7 +360,7 @@ function demoBar(canvasId, data, varKey, title, color) {
       datasets:[{label:'Oral BSI %', data:data.map(d=>d.pct), backgroundColor:color+'33', borderColor:color, borderWidth:1.5, borderRadius:8}]
     },
     options:{
-      indexAxis:'horizontal', responsive:true, maintainAspectRatio:false,
+      indexAxis:'y', responsive:true, maintainAspectRatio:false,
       scales:{x:{title:{display:true,text:'Oral BSI Prevalence (%)'},min:0,grid:{color:'rgba(30,41,59,.3)'},ticks:{callback:v=>v+'%'}},y:{grid:{display:false}}},
       plugins:{legend:{display:false},title:{display:true,text:title,font:{size:14,weight:'600'},padding:{bottom:16}},
         tooltip:{callbacks:{label:i=>`${i.raw}%`}}}

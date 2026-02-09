@@ -348,22 +348,45 @@ new Chart(document.getElementById('chartTrend'), {
 });
 
 /* ---- Demographics Charts ---- */
-function demoBar(canvasId, data, varKey, title, color) {
-  const labels = data.map(d => {
-    const val = d[varKey];
-    return typeof val === 'string' ? val : String(val);
-  });
+function demoBar(canvasId, items, varKey, title, color) {
+  const labels = items.map(function(d){ return String(d[varKey]); });
+  const values = items.map(function(d){ return d.pct; });
   new Chart(document.getElementById(canvasId), {
     type:'bar',
     data:{
-      labels,
-      datasets:[{label:'Oral BSI %', data:data.map(d=>d.pct), backgroundColor:color+'33', borderColor:color, borderWidth:1.5, borderRadius:8}]
+      labels: labels,
+      datasets:[{
+        label:'Oral BSI %',
+        data: values,
+        backgroundColor: color+'44',
+        borderColor: color,
+        borderWidth: 2,
+        borderRadius: 6,
+        barThickness: 30
+      }]
     },
     options:{
-      indexAxis:'y', responsive:true, maintainAspectRatio:false,
-      scales:{x:{title:{display:true,text:'Oral BSI Prevalence (%)'},min:0,grid:{color:'rgba(30,41,59,.3)'},ticks:{callback:v=>v+'%'}},y:{grid:{display:false}}},
-      plugins:{legend:{display:false},title:{display:true,text:title,font:{size:14,weight:'600'},padding:{bottom:16}},
-        tooltip:{callbacks:{label:i=>`${i.raw}%`}}}
+      indexAxis:'y',
+      responsive:true,
+      maintainAspectRatio:false,
+      scales:{
+        x:{
+          type:'linear',
+          title:{display:true,text:'Oral BSI Prevalence (%)'},
+          min:0,
+          grid:{color:'rgba(30,41,59,.3)'},
+          ticks:{callback:function(v){return v+'%';}}
+        },
+        y:{
+          type:'category',
+          grid:{display:false}
+        }
+      },
+      plugins:{
+        legend:{display:false},
+        title:{display:true,text:title,font:{size:14,weight:'600'},padding:{bottom:16}},
+        tooltip:{callbacks:{label:function(i){return i.raw+'%';}}}
+      }
     }
   });
 }

@@ -1,0 +1,398 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Oral Organisms in Bloodstream Infections — 2013–2024</title>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.7/dist/chart.umd.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2.2.0/dist/chartjs-plugin-datalabels.min.js"></script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#0a0e1a;--surface:#111827;--surface2:#1a2235;--border:#1e293b;
+  --text:#e2e8f0;--text2:#94a3b8;--accent:#3b82f6;--accent2:#6366f1;
+  --green:#10b981;--amber:#f59e0b;--rose:#f43f5e;--cyan:#06b6d4;
+  --purple:#a855f7;--orange:#f97316;
+  --gradient:linear-gradient(135deg,#3b82f6,#6366f1,#a855f7);
+}
+html{scroll-behavior:smooth}
+body{font-family:'Inter',system-ui,sans-serif;background:var(--bg);color:var(--text);line-height:1.6;overflow-x:hidden}
+.noise{position:fixed;inset:0;opacity:.03;pointer-events:none;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E")}
+
+/* Hero */
+.hero{position:relative;padding:5rem 2rem 4rem;text-align:center;overflow:hidden}
+.hero::before{content:'';position:absolute;top:-50%;left:-50%;width:200%;height:200%;background:radial-gradient(ellipse at 50% 0%,rgba(99,102,241,.15) 0%,transparent 60%);pointer-events:none}
+.hero-badge{display:inline-flex;align-items:center;gap:.5rem;padding:.4rem 1rem;border-radius:100px;background:rgba(59,130,246,.1);border:1px solid rgba(59,130,246,.2);color:var(--accent);font-size:.8rem;font-weight:500;letter-spacing:.05em;text-transform:uppercase;margin-bottom:1.5rem}
+.hero-badge .dot{width:6px;height:6px;border-radius:50%;background:var(--green);animation:pulse 2s infinite}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.4}}
+.hero h1{font-size:clamp(2rem,5vw,3.5rem);font-weight:800;letter-spacing:-.03em;background:var(--gradient);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;line-height:1.15;max-width:800px;margin:0 auto .8rem}
+.hero .subtitle{font-size:1.15rem;color:var(--text2);max-width:600px;margin:0 auto 2.5rem;font-weight:300}
+
+/* KPI Cards */
+.kpi-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:1rem;max-width:1200px;margin:0 auto 3rem;padding:0 2rem}
+.kpi{background:var(--surface);border:1px solid var(--border);border-radius:16px;padding:1.5rem;position:relative;overflow:hidden;transition:transform .2s,box-shadow .2s}
+.kpi:hover{transform:translateY(-2px);box-shadow:0 8px 30px rgba(0,0,0,.3)}
+.kpi::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;border-radius:16px 16px 0 0}
+.kpi:nth-child(1)::before{background:var(--accent)}
+.kpi:nth-child(2)::before{background:var(--green)}
+.kpi:nth-child(3)::before{background:var(--amber)}
+.kpi:nth-child(4)::before{background:var(--rose)}
+.kpi:nth-child(5)::before{background:var(--purple)}
+.kpi .label{font-size:.75rem;text-transform:uppercase;letter-spacing:.08em;color:var(--text2);font-weight:500;margin-bottom:.5rem}
+.kpi .value{font-size:2rem;font-weight:800;font-family:'JetBrains Mono','Inter',monospace;letter-spacing:-.02em}
+.kpi .sub{font-size:.8rem;color:var(--text2);margin-top:.25rem}
+.kpi:nth-child(1) .value{color:var(--accent)}
+.kpi:nth-child(2) .value{color:var(--green)}
+.kpi:nth-child(3) .value{color:var(--amber)}
+.kpi:nth-child(4) .value{color:var(--rose)}
+.kpi:nth-child(5) .value{color:var(--purple)}
+
+/* Sections */
+.container{max-width:1200px;margin:0 auto;padding:0 2rem}
+section{margin-bottom:3rem}
+.section-header{display:flex;align-items:center;gap:.75rem;margin-bottom:1.5rem}
+.section-header .icon{width:40px;height:40px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:1.2rem;flex-shrink:0}
+.section-header h2{font-size:1.4rem;font-weight:700;letter-spacing:-.02em}
+.section-header p{color:var(--text2);font-size:.85rem;margin-top:.15rem}
+
+/* Cards */
+.card{background:var(--surface);border:1px solid var(--border);border-radius:16px;padding:1.5rem;margin-bottom:1.5rem}
+.card-header{font-weight:600;margin-bottom:1rem;display:flex;align-items:center;gap:.5rem;font-size:.95rem}
+.chart-wrap{position:relative;height:350px;width:100%}
+.row2{display:grid;grid-template-columns:1fr 1fr;gap:1.5rem}
+@media(max-width:768px){.row2{grid-template-columns:1fr}}
+
+/* Tables */
+.table-wrap{overflow-x:auto;border-radius:12px;border:1px solid var(--border)}
+table{width:100%;border-collapse:collapse;font-size:.85rem}
+thead{background:var(--surface2)}
+th{padding:.75rem 1rem;text-align:left;font-weight:600;color:var(--text2);font-size:.75rem;text-transform:uppercase;letter-spacing:.06em;border-bottom:1px solid var(--border);white-space:nowrap}
+td{padding:.65rem 1rem;border-bottom:1px solid var(--border);white-space:nowrap}
+tbody tr:hover{background:rgba(59,130,246,.04)}
+tbody tr:last-child td{border-bottom:none}
+.mono{font-family:'JetBrains Mono',monospace;font-size:.82rem}
+.badge{display:inline-block;padding:2px 8px;border-radius:6px;font-size:.75rem;font-weight:600}
+.badge-blue{background:rgba(59,130,246,.15);color:#60a5fa}
+.badge-green{background:rgba(16,185,129,.15);color:#34d399}
+.badge-amber{background:rgba(245,158,11,.15);color:#fbbf24}
+.badge-rose{background:rgba(244,63,94,.15);color:#fb7185}
+
+/* Footer */
+footer{text-align:center;padding:3rem 2rem;color:var(--text2);font-size:.8rem;border-top:1px solid var(--border);margin-top:2rem}
+footer a{color:var(--accent);text-decoration:none}
+
+/* Nav dots */
+.nav-dots{position:fixed;right:1.5rem;top:50%;transform:translateY(-50%);display:flex;flex-direction:column;gap:.5rem;z-index:100}
+.nav-dots a{width:10px;height:10px;border-radius:50%;background:var(--border);transition:all .2s;border:2px solid transparent}
+.nav-dots a:hover,.nav-dots a.active{background:var(--accent);border-color:var(--accent);transform:scale(1.3)}
+@media(max-width:768px){.nav-dots{display:none}}
+
+/* Animate in */
+.fade-up{opacity:0;transform:translateY(30px);transition:opacity .6s ease,transform .6s ease}
+.fade-up.visible{opacity:1;transform:translateY(0)}
+
+/* Methodology */
+.method-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:1rem}
+.method-card{background:var(--surface2);border-radius:12px;padding:1.25rem;border:1px solid var(--border)}
+.method-card h4{font-size:.85rem;font-weight:600;margin-bottom:.5rem;color:var(--cyan)}
+.method-card p,.method-card ul{font-size:.82rem;color:var(--text2);line-height:1.7}
+.method-card ul{padding-left:1.2rem}
+</style>
+</head>
+<body>
+<div class="noise"></div>
+
+<nav class="nav-dots" id="navDots"></nav>
+
+<!-- HERO -->
+<header class="hero" id="top">
+  <div class="hero-badge"><span class="dot"></span> Research Report</div>
+  <h1>Prevalence & Incidence of Oral Organisms in Bloodstream Infections</h1>
+  <p class="subtitle">A 12-year retrospective analysis of blood culture isolates, 2013–2024</p>
+</header>
+
+<!-- KPIs -->
+<div class="kpi-grid fade-up" id="kpis"></div>
+
+<div class="container">
+
+  <!-- PREVALENCE -->
+  <section class="fade-up" id="sec-prevalence">
+    <div class="section-header">
+      <div class="icon" style="background:rgba(59,130,246,.12);color:var(--accent)">📊</div>
+      <div><h2>Prevalence Over Time</h2><p>Proportion of blood culture isolates identified as oral organisms</p></div>
+    </div>
+    <div class="card">
+      <div class="chart-wrap"><canvas id="chartPrevalence"></canvas></div>
+    </div>
+    <div class="card">
+      <div class="table-wrap"><table id="tblPrevalence"></table></div>
+    </div>
+  </section>
+
+  <!-- INCIDENCE -->
+  <section class="fade-up" id="sec-incidence">
+    <div class="section-header">
+      <div class="icon" style="background:rgba(16,185,129,.12);color:var(--green)">📈</div>
+      <div><h2>Incidence — Unique Patients</h2><p>Distinct patients with oral organism BSI per year</p></div>
+    </div>
+    <div class="card">
+      <div class="chart-wrap"><canvas id="chartIncidence"></canvas></div>
+    </div>
+  </section>
+
+  <!-- ORGANISM BREAKDOWN -->
+  <section class="fade-up" id="sec-organisms">
+    <div class="section-header">
+      <div class="icon" style="background:rgba(168,85,247,.12);color:var(--purple)">🦠</div>
+      <div><h2>Organism Distribution</h2><p>Frequency of individual oral species isolated from blood</p></div>
+    </div>
+    <div class="row2">
+      <div class="card">
+        <div class="card-header">🍩 Composition</div>
+        <div class="chart-wrap"><canvas id="chartDonut"></canvas></div>
+      </div>
+      <div class="card">
+        <div class="card-header">📋 Frequency Table</div>
+        <div class="table-wrap"><table id="tblOrganism"></table></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- TREND -->
+  <section class="fade-up" id="sec-trend">
+    <div class="section-header">
+      <div class="icon" style="background:rgba(249,115,22,.12);color:var(--orange)">🔄</div>
+      <div><h2>Temporal Trends by Organism Group</h2><p>Shift in the composition of oral BSI over the study period</p></div>
+    </div>
+    <div class="card">
+      <div class="chart-wrap" style="height:400px"><canvas id="chartTrend"></canvas></div>
+    </div>
+  </section>
+
+  <!-- DEMOGRAPHICS -->
+  <section class="fade-up" id="sec-demographics">
+    <div class="section-header">
+      <div class="icon" style="background:rgba(6,182,212,.12);color:var(--cyan)">👥</div>
+      <div><h2>Demographics & Clinical Settings</h2><p>Oral BSI prevalence across patient subgroups</p></div>
+    </div>
+    <div class="row2">
+      <div class="card"><div class="chart-wrap"><canvas id="chartDemoAge"></canvas></div></div>
+      <div class="card"><div class="chart-wrap"><canvas id="chartDemoWard"></canvas></div></div>
+    </div>
+    <div class="row2">
+      <div class="card"><div class="chart-wrap"><canvas id="chartDemoSex"></canvas></div></div>
+      <div class="card"><div class="chart-wrap"><canvas id="chartDemoICU"></canvas></div></div>
+    </div>
+  </section>
+
+  <!-- METHODOLOGY -->
+  <section class="fade-up" id="sec-methods">
+    <div class="section-header">
+      <div class="icon" style="background:rgba(244,63,94,.12);color:var(--rose)">🔬</div>
+      <div><h2>Methodology</h2><p>Study design and organism classification</p></div>
+    </div>
+    <div class="method-grid">
+      <div class="method-card">
+        <h4>Study Design</h4>
+        <p>Retrospective cross-sectional analysis of blood culture isolates from a single center, 2013–2024. All positive blood cultures were included.</p>
+      </div>
+      <div class="method-card">
+        <h4>Oral Organisms (Broad Definition)</h4>
+        <ul>
+          <li><strong>VGS:</strong> S. mitis, S. sanguinis, S. mutans, S. salivarius, S. anginosus, S. constellatus, S. intermedius</li>
+          <li><strong>Other oral:</strong> Gemella morbillorum, Neisseria sicca/sp., Peptostreptococcus sp., A. fermentans</li>
+          <li><strong>Borderline:</strong> Streptococcus sp., S. pneumoniae, S. pyogenes, S. agalactiae, C. albicans, Moraxella catarrhalis</li>
+        </ul>
+      </div>
+      <div class="method-card">
+        <h4>Definitions</h4>
+        <ul>
+          <li><strong>Prevalence:</strong> oral isolates ÷ total blood isolates × 100</li>
+          <li><strong>Incidence:</strong> unique patients with oral BSI ÷ unique patients with any blood culture × 100</li>
+        </ul>
+      </div>
+      <div class="method-card">
+        <h4>Limitations</h4>
+        <p>Single-center data. "Streptococcus sp." may include non-oral streptococci. Contaminants were not excluded. No population denominator available for true incidence rates.</p>
+      </div>
+    </div>
+  </section>
+
+</div>
+
+<footer>
+  <p>Generated on 9 Feb 2026 · Data source: Institutional microbiology database · Report by <a href="https://github.com/abaidalgarni">abaidalgarni</a></p>
+</footer>
+
+<script>
+const DATA = {"prevalence": {"years": [2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023, 2024], "total": [746, 575, 421, 633, 488, 489, 650, 799, 772, 913, 674, 640], "oral": [29, 15, 5, 11, 6, 13, 11, 10, 11, 18, 9, 11], "pct": [3.89, 2.61, 1.19, 1.74, 1.23, 2.66, 1.69, 1.25, 1.42, 1.97, 1.34, 1.72]}, "incidence": {"years": [2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023, 2024], "total_pts": [475, 420, 298, 424, 334, 339, 465, 578, 526, 610, 518, 483], "oral_pts": [27, 12, 5, 10, 6, 11, 11, 10, 11, 17, 9, 11], "pct": [5.68, 2.86, 1.68, 2.36, 1.8, 3.24, 2.37, 1.73, 2.09, 2.79, 1.74, 2.28]}, "organism_freq": [{"organism": "Streptococcus sp.", "count": 60, "pct_oral": 40.3, "pct_blood": 0.77}, {"organism": "Candida albicans", "count": 36, "pct_oral": 24.2, "pct_blood": 0.46}, {"organism": "Streptococcus pneumoniae", "count": 21, "pct_oral": 14.1, "pct_blood": 0.27}, {"organism": "Streptococcus agalactiae", "count": 18, "pct_oral": 12.1, "pct_blood": 0.23}, {"organism": "Streptococcus mitis", "count": 6, "pct_oral": 4.0, "pct_blood": 0.08}, {"organism": "Streptococcus pyogenes", "count": 5, "pct_oral": 3.4, "pct_blood": 0.06}, {"organism": "Streptococcus anginosus", "count": 1, "pct_oral": 0.7, "pct_blood": 0.01}, {"organism": "Streptococcus sanguinis", "count": 1, "pct_oral": 0.7, "pct_blood": 0.01}, {"organism": "Streptococcus mutans", "count": 1, "pct_oral": 0.7, "pct_blood": 0.01}], "trend": {"years": [2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023, 2024], "VGS / Strep sp.": [26, 13, 5, 8, 4, 4, 2, 0, 1, 1, 0, 5], "C. albicans": [0, 1, 0, 0, 0, 3, 2, 6, 7, 11, 3, 3], "S. pneumoniae": [3, 0, 0, 1, 2, 1, 4, 2, 1, 2, 4, 1], "S. agalactiae": [0, 1, 0, 2, 0, 4, 2, 2, 2, 4, 1, 0], "S. pyogenes": [0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 1, 2]}, "demographics": {"sex": [{"sex": "Man", "non_oral": 4981, "oral": 91, "total": 5072, "pct": 1.8}, {"sex": "Woman", "non_oral": 2670, "oral": 58, "total": 2728, "pct": 2.1}], "ageclin": [{"ageclin": "Pediatric (<18)", "non_oral": 653, "oral": 26, "total": 679, "pct": 3.8}, {"ageclin": "Adult (18-64)", "non_oral": 3936, "oral": 79, "total": 4015, "pct": 2.0}, {"ageclin": "Older (\u226565)", "non_oral": 3062, "oral": 44, "total": 3106, "pct": 1.4}], "ptloc": [{"ptloc": "Emergency", "non_oral": 1952, "oral": 59, "total": 2011, "pct": 2.9}, {"ptloc": "External", "non_oral": 1, "oral": 0, "total": 1, "pct": 0.0}, {"ptloc": "Inpatient", "non_oral": 5690, "oral": 90, "total": 5780, "pct": 1.6}, {"ptloc": "Outpatient", "non_oral": 8, "oral": 0, "total": 8, "pct": 0.0}], "icu": [{"icu": "No", "non_oral": 4518, "oral": 104, "total": 4622, "pct": 2.3}, {"icu": "Yes", "non_oral": 3133, "oral": 45, "total": 3178, "pct": 1.4}], "ward_type": [{"ward_type": "ICU", "non_oral": 3133, "oral": 45, "total": 3178, "pct": 1.4}, {"ward_type": "Medical", "non_oral": 2342, "oral": 47, "total": 2389, "pct": 2.0}, {"ward_type": "Surgical", "non_oral": 1346, "oral": 25, "total": 1371, "pct": 1.8}, {"ward_type": "Pediatric", "non_oral": 142, "oral": 9, "total": 151, "pct": 6.0}, {"ward_type": "Other", "non_oral": 688, "oral": 23, "total": 711, "pct": 3.2}]}, "summary": {"total_blood": 7800, "oral_count": 149, "overall_prev": 1.91, "unique_patients": 5173, "unique_oral_pts": 140, "year_range": "2013\u20132024"}};
+
+/* ---- KPIs ---- */
+const kpis = [
+  {label:'Total Blood Isolates', value:DATA.summary.total_blood.toLocaleString(), sub: DATA.summary.year_range},
+  {label:'Oral Organism Isolates', value:DATA.summary.oral_count, sub:'from blood cultures'},
+  {label:'Overall Prevalence', value:DATA.summary.overall_prev+'%', sub:'oral / total blood'},
+  {label:'Unique Patients', value:DATA.summary.unique_patients.toLocaleString(), sub:'with blood cultures'},
+  {label:'Oral BSI Patients', value:DATA.summary.unique_oral_pts, sub:'unique patients'},
+];
+document.getElementById('kpis').innerHTML = kpis.map(k=>
+  `<div class="kpi"><div class="label">${k.label}</div><div class="value">${k.value}</div><div class="sub">${k.sub}</div></div>`
+).join('');
+
+/* ---- Chart defaults ---- */
+Chart.defaults.color = '#94a3b8';
+Chart.defaults.borderColor = 'rgba(30,41,59,.5)';
+Chart.defaults.font.family = "'Inter',system-ui,sans-serif";
+Chart.defaults.plugins.legend.labels.usePointStyle = true;
+Chart.defaults.plugins.legend.labels.pointStyleWidth = 8;
+
+const gradient = (ctx, c1, c2) => {
+  const g = ctx.chart.ctx.createLinearGradient(0, 0, 0, ctx.chart.height);
+  g.addColorStop(0, c1); g.addColorStop(1, c2); return g;
+};
+
+/* ---- Prevalence Chart ---- */
+new Chart(document.getElementById('chartPrevalence'), {
+  type:'bar',
+  data:{
+    labels: DATA.prevalence.years,
+    datasets:[
+      {label:'Total Blood Isolates', data:DATA.prevalence.total, backgroundColor:'rgba(59,130,246,.15)', borderColor:'#3b82f6', borderWidth:1, borderRadius:6, yAxisID:'y', order:2},
+      {label:'Prevalence %', data:DATA.prevalence.pct, type:'line', borderColor:'#f43f5e', backgroundColor:'rgba(244,63,94,.1)', pointBackgroundColor:'#f43f5e', pointRadius:5, pointHoverRadius:7, tension:.3, yAxisID:'y1', order:1, fill:true}
+    ]
+  },
+  options:{
+    responsive:true, maintainAspectRatio:false,
+    interaction:{mode:'index',intersect:false},
+    scales:{
+      y:{position:'left',title:{display:true,text:'Blood Isolates'},grid:{color:'rgba(30,41,59,.3)'}},
+      y1:{position:'right',title:{display:true,text:'Prevalence (%)'},min:0,max:5,grid:{drawOnChartArea:false},ticks:{callback:v=>v+'%'}}
+    },
+    plugins:{tooltip:{callbacks:{label:i=>i.dataset.label+': '+(i.datasetIndex===1?i.raw+'%':i.raw)}}}
+  }
+});
+
+/* ---- Prevalence Table ---- */
+{
+  const t = document.getElementById('tblPrevalence');
+  let h = '<thead><tr><th>Year</th><th>Blood Isolates</th><th>Oral Isolates</th><th>Prevalence %</th></tr></thead><tbody>';
+  DATA.prevalence.years.forEach((y,i) => {
+    const p = DATA.prevalence.pct[i];
+    const cls = p >= 3 ? 'badge-rose' : p >= 2 ? 'badge-amber' : 'badge-green';
+    h += `<tr><td class="mono">${y}</td><td class="mono">${DATA.prevalence.total[i]}</td><td class="mono">${DATA.prevalence.oral[i]}</td><td><span class="badge ${cls}">${p}%</span></td></tr>`;
+  });
+  h += '</tbody>'; t.innerHTML = h;
+}
+
+/* ---- Incidence Chart ---- */
+new Chart(document.getElementById('chartIncidence'), {
+  type:'line',
+  data:{
+    labels: DATA.incidence.years,
+    datasets:[
+      {label:'Incidence %', data:DATA.incidence.pct, borderColor:'#10b981', backgroundColor:'rgba(16,185,129,.08)', pointBackgroundColor:'#10b981', pointRadius:5, pointHoverRadius:7, tension:.3, fill:true},
+    ]
+  },
+  options:{
+    responsive:true, maintainAspectRatio:false,
+    scales:{y:{title:{display:true,text:'Incidence (%)'},min:0,max:7,ticks:{callback:v=>v+'%'},grid:{color:'rgba(30,41,59,.3)'}}},
+    plugins:{tooltip:{callbacks:{label:i=>`${i.raw}% (${DATA.incidence.oral_pts[i.dataIndex]}/${DATA.incidence.total_pts[i.dataIndex]} patients)`}}}
+  }
+});
+
+/* ---- Donut ---- */
+const orgColors = ['#3b82f6','#f43f5e','#f59e0b','#10b981','#a855f7','#06b6d4','#f97316'];
+new Chart(document.getElementById('chartDonut'), {
+  type:'doughnut',
+  data:{
+    labels: DATA.organism_freq.map(o=>o.organism),
+    datasets:[{data:DATA.organism_freq.map(o=>o.count), backgroundColor:orgColors.slice(0,DATA.organism_freq.length), borderWidth:0, hoverOffset:8}]
+  },
+  options:{responsive:true, maintainAspectRatio:false, cutout:'60%',
+    plugins:{legend:{position:'bottom',labels:{padding:12,font:{size:11}}}}}
+});
+
+/* ---- Organism Table ---- */
+{
+  const t = document.getElementById('tblOrganism');
+  let h = '<thead><tr><th>#</th><th>Organism</th><th>n</th><th>% Oral</th><th>% Blood</th></tr></thead><tbody>';
+  DATA.organism_freq.forEach((o,i) => {
+    h += `<tr><td class="mono">${i+1}</td><td><em>${o.organism}</em></td><td class="mono">${o.count}</td><td class="mono">${o.pct_oral}%</td><td class="mono">${o.pct_blood}%</td></tr>`;
+  });
+  h += '</tbody>'; t.innerHTML = h;
+}
+
+/* ---- Trend Stacked Area ---- */
+const trendColors = {
+  'VGS / Strep sp.':'#3b82f6','C. albicans':'#f43f5e','S. pneumoniae':'#f59e0b',
+  'S. agalactiae':'#10b981','S. pyogenes':'#a855f7'
+};
+new Chart(document.getElementById('chartTrend'), {
+  type:'line',
+  data:{
+    labels: DATA.trend.years,
+    datasets: Object.keys(trendColors).map(g => ({
+      label:g, data:DATA.trend[g], borderColor:trendColors[g],
+      backgroundColor:trendColors[g]+'18', fill:true, tension:.3, pointRadius:4, pointHoverRadius:6
+    }))
+  },
+  options:{
+    responsive:true, maintainAspectRatio:false,
+    interaction:{mode:'index',intersect:false},
+    scales:{y:{stacked:true,title:{display:true,text:'Number of Isolates'},grid:{color:'rgba(30,41,59,.3)'}},x:{grid:{display:false}}},
+    plugins:{legend:{position:'top'}}
+  }
+});
+
+/* ---- Demographics Charts ---- */
+function demoBar(canvasId, data, varKey, title, color) {
+  const labels = data.map(d => {
+    const val = d[varKey];
+    return typeof val === 'string' ? val : String(val);
+  });
+  new Chart(document.getElementById(canvasId), {
+    type:'bar',
+    data:{
+      labels,
+      datasets:[{label:'Oral BSI %', data:data.map(d=>d.pct), backgroundColor:color+'33', borderColor:color, borderWidth:1.5, borderRadius:8}]
+    },
+    options:{
+      indexAxis:'horizontal', responsive:true, maintainAspectRatio:false,
+      scales:{x:{title:{display:true,text:'Oral BSI Prevalence (%)'},min:0,grid:{color:'rgba(30,41,59,.3)'},ticks:{callback:v=>v+'%'}},y:{grid:{display:false}}},
+      plugins:{legend:{display:false},title:{display:true,text:title,font:{size:14,weight:'600'},padding:{bottom:16}},
+        tooltip:{callbacks:{label:i=>`${i.raw}%`}}}
+    }
+  });
+}
+demoBar('chartDemoAge', DATA.demographics.ageclin, 'ageclin', 'By Age Group', '#06b6d4');
+demoBar('chartDemoWard', DATA.demographics.ward_type, 'ward_type', 'By Ward Type', '#a855f7');
+demoBar('chartDemoSex', DATA.demographics.sex, 'sex', 'By Sex', '#3b82f6');
+demoBar('chartDemoICU', DATA.demographics.icu, 'icu', 'ICU vs Non-ICU', '#f59e0b');
+
+/* ---- Scroll Animations ---- */
+const observer = new IntersectionObserver(entries => {
+  entries.forEach(e => { if(e.isIntersecting) e.target.classList.add('visible') });
+}, {threshold:.1});
+document.querySelectorAll('.fade-up').forEach(el => observer.observe(el));
+
+/* ---- Nav Dots ---- */
+const sections = ['top','sec-prevalence','sec-incidence','sec-organisms','sec-trend','sec-demographics','sec-methods'];
+const dotLabels = ['Top','Prevalence','Incidence','Organisms','Trends','Demographics','Methods'];
+document.getElementById('navDots').innerHTML = sections.map((s,i)=>
+  `<a href="#${s}" title="${dotLabels[i]}"></a>`
+).join('');
+window.addEventListener('scroll', () => {
+  const dots = document.querySelectorAll('.nav-dots a');
+  let current = 0;
+  sections.forEach((s,i) => {
+    const el = document.getElementById(s);
+    if(el && el.getBoundingClientRect().top <= 200) current = i;
+  });
+  dots.forEach((d,i) => d.classList.toggle('active', i===current));
+});
+</script>
+</body>
+</html>
